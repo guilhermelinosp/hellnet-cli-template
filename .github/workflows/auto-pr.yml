@@ -6,6 +6,10 @@ on:
       - 'feat/**'
       - 'fix/**'
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   create-pr:
-    uses: guilhermelinosp/ci-templates/.github/workflows/auto-pr.yml@main
+    uses: guilhermelinosp/templates/.github/workflows/auto-pr.yml@main
