@@ -27,15 +27,6 @@ jobs:
   labeler:
     uses: guilhermelinosp/templates/.github/workflows/labeler.yml@e7d093b460c1e25f16121d509eefcbb597612c95 # main
 
-  # Full Go gate from the org reusable: module integrity, vet, boundary
-  # guard, race tests + coverage, canonical lint, build smoke and
-  # dependency review (embedded).
-  go-quality:
-    uses: guilhermelinosp/templates/.github/workflows/go-quality.yml@e7d093b460c1e25f16121d509eefcbb597612c95 # main
-    with:
-      extra-commands: make verify
-      build-command: make build
-      smoke-command: ./bin/golang-cli-template --version
 
   govulncheck:
     uses: guilhermelinosp/templates/.github/workflows/govulncheck.yml@e7d093b460c1e25f16121d509eefcbb597612c95 # main

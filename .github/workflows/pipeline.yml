@@ -2,17 +2,14 @@ name: pipeline
 
 # Library CI: cut a semver tag + GitHub Release on every code change to main
 # (changes limited to .github/ are ignored so CI edits never trigger a
-# release), then run the quality gate.
+# release), then run the quality gate and build a container image.
 
 on:
   push:
     branches: [main]
     paths-ignore:
-      - '.github/**'
+      - .github/**
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   guard-semver:
@@ -24,7 +21,7 @@ jobs:
           fetch-depth: 0
       - name: Block auto-major (Go module path has no /v2 suffix)
         run: |
-          LAST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || echo "")
+          LAST_TAG=$(git tag --sort=-version:refname | grep -E ^v[0-9]+\.[0-9]+\.[0-9]+$ | head -1 || echo "")
           if [ -z "$LAST_TAG" ]; then
             echo "No tags yet, skipping"
             exit 0
@@ -38,15 +35,26 @@ jobs:
   release:
     name: release
     needs: [guard-semver]
-    uses: guilhermelinosp/templates/.github/workflows/release.yml@e7d093b460c1e25f16121d509eefcbb597612c95 # main
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
+    uses: guilhermelinosp/templates/.github/workflows/release.yml@fde7d4a5a2e7aa5dd42e8812df4783daa39b1543 # main
 
   quality:
     name: quality
     needs: [release]
-    uses: guilhermelinosp/templates/.github/workflows/lib-quality.yml@e7d093b460c1e25f16121d509eefcbb597612c95 # main
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: guilhermelinosp/templates/.github/workflows/lib-quality.yml@fde7d4a5a2e7aa5dd42e8812df4783daa39b1543 # main
     with:
       go-version-file: go.mod
+
+  image:
+    name: image
+    needs: [release, quality]
+    permissions:
+      contents: read
+      packages: write
+    uses: guilhermelinosp/templates/.github/workflows/buildah.yml@af2bcbe5d72882b5ab9145a02620d229dd14587f # main
+    with:
+      version: ${{ needs.release.outputs.version }}
