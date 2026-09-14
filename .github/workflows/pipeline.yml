@@ -37,7 +37,10 @@ jobs:
     needs: [guard-semver]
     permissions:
       contents: write
-    uses: guilhermelinosp/templates/.github/workflows/release.yml@fde7d4a5a2e7aa5dd42e8812df4783daa39b1543 # main
+    uses: guilhermelinosp/templates/.github/workflows/release.yml@9a3e1c923824fbd71b5dad45976c6e66ba2a1a01 # main
+    secrets: inherit
+    with:
+      app-client-id: ${{ vars.HELLNET_ACTIONS_CLIENT_ID }}
 
   quality:
     name: quality
@@ -58,3 +61,15 @@ jobs:
     uses: guilhermelinosp/templates/.github/workflows/buildah.yml@9aa28e4932048b724e165f169963643e8c4bcd69 # main
     with:
       version: ${{ needs.release.outputs.version }}
+
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: guilhermelinosp/templates/.github/workflows/lib-quality.yml@9a3e1c923824fbd71b5dad45976c6e66ba2a1a01 # main
+  image:
+    name: image
+    needs: [release, quality]
+    permissions:
+      contents: read
+      packages: write
+    uses: guilhermelinosp/templates/.github/workflows/buildah.yml@9a3e1c923824fbd71b5dad45976c6e66ba2a1a01 # main
