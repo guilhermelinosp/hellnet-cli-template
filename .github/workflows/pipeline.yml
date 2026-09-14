@@ -38,6 +38,9 @@ jobs:
     permissions:
       contents: write
     uses: guilhermelinosp/templates/.github/workflows/release.yml@9a3e1c923824fbd71b5dad45976c6e66ba2a1a01 # main
+    with:
+      app-client-id: ${{ vars.HELLNET_ACTIONS_CLIENT_ID }}
+    secrets: inherit
     secrets: inherit
     with:
       app-client-id: ${{ vars.HELLNET_ACTIONS_CLIENT_ID }}
@@ -48,7 +51,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: guilhermelinosp/templates/.github/workflows/lib-quality.yml@fde7d4a5a2e7aa5dd42e8812df4783daa39b1543 # main
+    uses: guilhermelinosp/templates/.github/workflows/lib-quality.yml@9a3e1c923824fbd71b5dad45976c6e66ba2a1a01 # main
     with:
       go-version-file: go.mod
 
@@ -58,7 +61,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: guilhermelinosp/templates/.github/workflows/buildah.yml@9aa28e4932048b724e165f169963643e8c4bcd69 # main
+    uses: guilhermelinosp/templates/.github/workflows/buildah.yml@9a3e1c923824fbd71b5dad45976c6e66ba2a1a01 # main
     with:
       version: ${{ needs.release.outputs.version }}
 
