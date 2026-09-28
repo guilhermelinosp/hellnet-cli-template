@@ -12,7 +12,7 @@
 package config
 
 import (
-	"os"
+	"github.com/guilhermelinosp/golang-cli-template/internal/env"
 	"strings"
 )
 
@@ -35,10 +35,10 @@ func Defaults() Config {
 // prefer flag validation for user-facing feedback.
 func Load(prefix string) Config {
 	cfg := Defaults()
-	if v := os.Getenv(envKey(prefix, "LOG_LEVEL")); v != "" {
+	if v := env.String(envKey(prefix, "LOG_LEVEL"), ""); v != "" {
 		cfg.LogLevel = strings.ToLower(v)
 	}
-	if v := os.Getenv(envKey(prefix, "LOG_FORMAT")); v != "" {
+	if v := env.String(envKey(prefix, "LOG_FORMAT"), ""); v != "" {
 		cfg.LogFormat = strings.ToLower(v)
 	}
 	return cfg
