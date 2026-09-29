@@ -305,3 +305,11 @@ it out.
 ## License
 
 [Apache 2.0](LICENSE)
+
+<!-- release pipeline verification -->
+
+<!-- verify round 2 -->
+
+<!-- verify round 3 -->
+
+<!-- verify round 4 -->
