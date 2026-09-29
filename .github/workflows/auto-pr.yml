@@ -12,4 +12,4 @@ permissions:
 
 jobs:
   create-pr:
-    uses: guilhermelinosp/templates/.github/workflows/auto-pr.yml@main
+    uses: guilhermelinosp/templates/.github/workflows/auto-pr.yml@df74d94727dface3aa3aa9011ab02b8b037f90ea
