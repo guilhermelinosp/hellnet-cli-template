@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/guilhermelinosp/golang-cli-template/internal/build"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/build"
 )
 
 // Printf writes a formatted business result to the invocation's stdout.

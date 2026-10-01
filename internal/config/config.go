@@ -12,7 +12,7 @@
 package config
 
 import (
-	"github.com/guilhermelinosp/golang-cli-template/internal/env"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/env"
 	"strings"
 )
 

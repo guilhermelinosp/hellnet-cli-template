@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/guilhermelinosp/golang-cli-template/internal/cli"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/cli"
 )
 
 // harness builds a real Cobra-backed app bound to memory streams.

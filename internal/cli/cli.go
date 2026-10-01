@@ -8,7 +8,7 @@
 // image codecs in the standard library):
 //
 //	import (
-//	    _ "github.com/guilhermelinosp/golang-cli-template/internal/cli/cobra"
+//	    _ "github.com/guilhermelinosp/hellnet-cli-template/internal/cli/cobra"
 //	)
 //
 // Swapping engines later means changing exactly one underscore import — no

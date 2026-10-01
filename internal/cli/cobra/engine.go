@@ -12,7 +12,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guilhermelinosp/golang-cli-template/internal/cli"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/cli"
 )
 
 func init() {

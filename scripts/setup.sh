@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# setup.sh — bootstrap a derived project from golang-cli-template.
+# setup.sh — bootstrap a derived project from hellnet-cli-template.
 #
 # Interactive by default; scriptable with flags:
 #   ./scripts/setup.sh -n mycli -m github.com/me/mycli [-y]
 set -euo pipefail
 
-OLD_MODULE="github.com/guilhermelinosp/golang-cli-template"
+OLD_MODULE="github.com/guilhermelinosp/hellnet-cli-template"
 OLD_APP="app"
-OLD_BINARY="golang-cli-template"
+OLD_BINARY="hellnet-cli-template"
 
 APP_NAME=""
 MODULE=""
