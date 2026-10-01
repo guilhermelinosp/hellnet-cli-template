@@ -12,8 +12,9 @@
 package config
 
 import (
-	"github.com/guilhermelinosp/golang-cli-template/internal/env"
 	"strings"
+
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/env"
 )
 
 // Config carries the operational settings the base template cares about.

@@ -21,7 +21,7 @@ COPY . .
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
     CGO_ENABLED=0 GOFLAGS=-trimpath \
-    go build -ldflags="-w -s -X github.com/guilhermelinosp/golang-cli-template/internal/build.Version=${VERSION} -X github.com/guilhermelinosp/golang-cli-template/internal/build.Commit=${COMMIT} -X github.com/guilhermelinosp/golang-cli-template/internal/build.Date=${DATE}" \
+    go build -ldflags="-w -s -X github.com/guilhermelinosp/hellnet-cli-template/internal/build.Version=${VERSION} -X github.com/guilhermelinosp/hellnet-cli-template/internal/build.Commit=${COMMIT} -X github.com/guilhermelinosp/hellnet-cli-template/internal/build.Date=${DATE}" \
     -o /app ./cmd/app
 
 # ── Runtime stage ────────────────────────────────────────────────────────────

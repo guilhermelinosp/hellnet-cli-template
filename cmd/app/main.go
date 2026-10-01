@@ -12,13 +12,13 @@ import (
 	"syscall"
 	"time"
 
-	_ "github.com/guilhermelinosp/golang-cli-template/internal/cli/cobra" // activate CLI engine (swap implementations by changing this import)
+	_ "github.com/guilhermelinosp/hellnet-cli-template/internal/cli/cobra" // activate CLI engine (swap implementations by changing this import)
 
-	"github.com/guilhermelinosp/golang-cli-template/internal/build"
-	"github.com/guilhermelinosp/golang-cli-template/internal/cli"
-	"github.com/guilhermelinosp/golang-cli-template/internal/config"
-	"github.com/guilhermelinosp/golang-cli-template/internal/logging"
-	"github.com/guilhermelinosp/golang-cli-template/internal/service/health"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/build"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/cli"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/config"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/logging"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/service/health"
 )
 
 // startedAt anchors uptime metrics reported by `health`.
@@ -48,7 +48,7 @@ func run(ctx context.Context) int {
 	app := cli.New(cli.Options{
 		Name:    filepath.Base(os.Args[0]),
 		Version: build.Version,
-		Long:    "Production-ready CLI scaffold generated from golang-cli-template.\nReplace this description with what your tool does.",
+		Long:    "Production-ready CLI scaffold generated from hellnet-cli-template.\nReplace this description with what your tool does.",
 	})
 	app.Add(
 		newHealthCommand(health.New(startedAt, build.Version, logger)),

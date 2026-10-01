@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/guilhermelinosp/golang-cli-template/internal/cli"
-	"github.com/guilhermelinosp/golang-cli-template/internal/service/health"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/cli"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/service/health"
 )
 
 // newHealthCommand is the canonical example of adding a command: declare the

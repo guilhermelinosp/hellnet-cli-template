@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/guilhermelinosp/golang-cli-template/internal/cli"
+	"github.com/guilhermelinosp/hellnet-cli-template/internal/cli"
 )
 
 // flagBridge adapts an abstraction Flag into pflag's Value contract. Cobra

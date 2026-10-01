@@ -1,4 +1,4 @@
-module github.com/guilhermelinosp/golang-cli-template
+module github.com/guilhermelinosp/hellnet-cli-template
 
 go 1.27.0
 

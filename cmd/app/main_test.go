@@ -14,7 +14,7 @@ import (
 // as a real process so process-level guarantees (exit codes, stream
 // separation) are covered end-to-end.
 func TestMain(m *testing.M) {
-	bin, err := filepath.Abs(filepath.Join(os.TempDir(), "golang-cli-template-e2e"))
+	bin, err := filepath.Abs(filepath.Join(os.TempDir(), "hellnet-cli-template-e2e"))
 	if err != nil {
 		panic(err)
 	}
@@ -52,13 +52,13 @@ func TestE2E(t *testing.T) {
 			name:     "version subcommand",
 			args:     []string{"version"},
 			wantCode: 0,
-			wantOut:  []string{"golang-cli-template-e2e ", "(commit ", "go go"},
+			wantOut:  []string{"hellnet-cli-template-e2e ", "(commit ", "go go"},
 		},
 		{
 			name:     "version flag identical output",
 			args:     []string{"--version"},
 			wantCode: 0,
-			wantOut:  []string{"golang-cli-template-e2e "},
+			wantOut:  []string{"hellnet-cli-template-e2e "},
 		},
 		{
 			name:     "help flag",
@@ -165,7 +165,7 @@ func TestE2E(t *testing.T) {
 
 func assertJSONLogsOnStdout(t *testing.T, stderrText string) {
 	t.Helper()
-	if !strings.Contains(stderrText, `"service":"golang-cli-template-e2e"`) {
+	if !strings.Contains(stderrText, `"service":"hellnet-cli-template-e2e"`) {
 		t.Skipf("slog debug records not emitted at info level (fine): %.80s", stderrText)
 	}
 	var rec map[string]any

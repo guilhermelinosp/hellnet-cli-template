@@ -1,6 +1,6 @@
 version: 2
 
-project_name: golang-cli-template
+project_name: hellnet-cli-template
 
 before:
   hooks:
