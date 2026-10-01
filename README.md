@@ -32,6 +32,18 @@ no zap, no DI frameworks. Every addition must justify itself.
 
 ---
 
+## Initialize from this template
+
+After **Use this template**, clone the new repository and run:
+
+```bash
+scripts/setup.sh -n <app-name> -m github.com/<you>/<repo>   # renames the module, imports and cmd/app
+scripts/setup-repo.sh                                       # repo settings, "main" ruleset and CI variable
+```
+
+Then create the `HELLNET_ACTIONS_PRIVATE_KEY` secret (the script prints the exact command) and make sure the
+`hellnet-actions` GitHub App is installed on the repository.
+
 ## Quick start
 
 1. **Use this template** on GitHub (or `git clone`).
@@ -103,7 +115,8 @@ internal/
 ├── service/health/       # example DOMAIN SERVICE behind the health command
 └── build/info.go         # ldflags-injected metadata
 cmd/app/                  # main.go (wiring only) + example commands
-scripts/setup.sh          # template bootstrap automation
+scripts/setup.sh          # template bootstrap automation (rename module/app)
+scripts/setup-repo.sh     # GitHub repo settings, ruleset and CI variable
 ```
 
 Why not keep it simpler? The indirection costs ~200 lines and buys:
