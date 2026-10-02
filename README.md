@@ -50,34 +50,21 @@ Then create the `HELLNET_ACTIONS_PRIVATE_KEY` secret (the script prints the exac
 2. Rename everything with one command:
 
 ```bash
-make setup        # prompts app name + module path, rewrites module/dir/binary
+scripts/setup.sh -n <app-name> -m github.com/<you>/<repo>   # rewrites module, imports, cmd/ and binary, then smoke-tests
 ```
 
 3. Run it:
 
 ```bash
-make test
-make build
+go test ./...
+go build -o bin/<your-app> ./cmd/<your-app>
 ./bin/<your-app> --help
 ./bin/<your-app> health --json
 ```
 
 That's the whole ceremony. Start writing commands.
 
-### Manual renaming (if you prefer)
-
-```bash
-# 1. go.mod: rename the module; internal imports cascade from this string
-sed -i '' 's|github.com/guilhermelinosp/hellnet-cli-template|github.com/YOU/YOUR-REPO|' go.mod
-grep -rl --include='*.go' github.com/guilhermelinosp/hellnet-cli-template . \
-  | xargs sed -i '' 's|github.com/guilhermelinosp/hellnet-cli-template|github.com/YOU/YOUR-REPO|'
-
-# 2. rename the entrypoint dir and binary default
-mv cmd/app cmd/yourapp
-sed -i '' 's|^APP ?= .*|APP ?= yourapp|' Makefile
-```
-
-`make setup` automates exactly these steps plus a smoke test.
+`scripts/setup.sh` runs `scripts/init-from-template.sh` (module, imports, `cmd/app`, binary, GoReleaser and Containerfile names), then `go mod tidy`, a build and the tests.
 
 ---
 
@@ -97,8 +84,9 @@ Cobra / pflag               ← swappable implementation detail
 ```
 
 **The rule:** application code depends on the abstraction, never on Cobra.
-The boundary is enforced in CI via `make verify` (a grep guard), so the
-engine can be replaced later without touching a single business command.
+The boundary is enforced by `TestEngineBoundary` (`internal/cli/boundary_test.go`), which runs with
+`go test ./...` and therefore in CI, so the engine can be replaced later without touching a single
+business command.
 
 ```
 internal/
@@ -249,9 +237,11 @@ streams resolve per invocation (see `TestSnapshotIsolationBetweenRuns`).
 ## Building & releasing
 
 ```bash
-make build     # bin/<app> with stamped version/commit/date
-VERSION=1.2.3 make build   # override anything explicitly
-make release   # local snapshot build of all platforms (dist/)
+# bin/<app> with stamped version/commit/date (stored in internal/build)
+M=github.com/<you>/<repo>
+go build -ldflags "-X $M/internal/build.Version=1.2.3 -X $M/internal/build.Commit=$(git rev-parse --short HEAD) -X $M/internal/build.Date=$(date -u +%FT%TZ)" -o bin/<app> ./cmd/<app>
+
+goreleaser release --snapshot --clean      # local snapshot build of all platforms (dist/)
 git tag v1.2.3 && git push origin v1.2.3   # real release → GitHub Actions
 ```
 
