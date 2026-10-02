@@ -313,7 +313,7 @@ Install the git hooks once with `lefthook install`: they run formatting, vet, te
 | `auto-pr` | push to `feat/**` or `fix/**` | opens the pull request automatically |
 | `dependabot-actions-auto-merge` | Dependabot pull requests | auto-merges GitHub Actions bumps |
 
-The workflows call reusable workflows from [templates](https://github.com/guilhermelinosp/templates) at `@main`. Releases need the `HELLNET_ACTIONS_PRIVATE_KEY` secret and the `HELLNET_ACTIONS_CLIENT_ID` variable (set them with `scripts/setup-repo.sh`).
+The workflows call reusable workflows from [templates](https://github.com/guilhermelinosp/templates) at `@latest`. Releases need the `HELLNET_ACTIONS_PRIVATE_KEY` secret and the `HELLNET_ACTIONS_CLIENT_ID` variable (set them with `scripts/setup-repo.sh`).
 
 ## Contributing and license
 
