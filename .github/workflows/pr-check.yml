@@ -16,23 +16,23 @@ concurrency:
 
 jobs:
   lint:
-    uses: guilhermelinosp/templates/.github/workflows/shellcheck.yml@df9f66533749a4a3a4b59c18a828a179800de096
+    uses: guilhermelinosp/templates/.github/workflows/shellcheck.yml@latest
 
   merge-check:
-    uses: guilhermelinosp/templates/.github/workflows/merge-check.yml@df9f66533749a4a3a4b59c18a828a179800de096
+    uses: guilhermelinosp/templates/.github/workflows/merge-check.yml@latest
 
   gitleaks:
-    uses: guilhermelinosp/templates/.github/workflows/gitleaks.yml@df9f66533749a4a3a4b59c18a828a179800de096
+    uses: guilhermelinosp/templates/.github/workflows/gitleaks.yml@latest
 
   labeler:
-    uses: guilhermelinosp/templates/.github/workflows/labeler.yml@df9f66533749a4a3a4b59c18a828a179800de096
+    uses: guilhermelinosp/templates/.github/workflows/labeler.yml@latest
     with:
       app-client-id: ${{ vars.HELLNET_ACTIONS_CLIENT_ID }}
     secrets: inherit
 
 
   govulncheck:
-    uses: guilhermelinosp/templates/.github/workflows/govulncheck.yml@df9f66533749a4a3a4b59c18a828a179800de096
+    uses: guilhermelinosp/templates/.github/workflows/govulncheck.yml@latest
 
 # CodeQL runs via the per-repo inline workflow (.github/workflows/codeql.yml):
 # the reusable variant still triggers GitHub-side startup_failure across
