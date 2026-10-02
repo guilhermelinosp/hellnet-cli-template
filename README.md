@@ -12,6 +12,10 @@ Run: func(ctx context.Context, c *cli.Command, args []string) error {
 },
 ```
 
+[![pipeline](https://github.com/guilhermelinosp/hellnet-cli-template/actions/workflows/pipeline.yml/badge.svg)](https://github.com/guilhermelinosp/hellnet-cli-template/actions/workflows/pipeline.yml)
+[![pr-check](https://github.com/guilhermelinosp/hellnet-cli-template/actions/workflows/pr-check.yml/badge.svg)](https://github.com/guilhermelinosp/hellnet-cli-template/actions/workflows/pr-check.yml)
+[![CodeQL](https://github.com/guilhermelinosp/hellnet-cli-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/guilhermelinosp/hellnet-cli-template/actions/workflows/codeql.yml)
+
 ## Why this template
 
 | Concern                | What you get out of the box                                              |
@@ -29,8 +33,6 @@ Run: func(ctx context.Context, c *cli.Command, args []string) error {
 
 Dependencies: **`spf13/cobra` only** (+ its `pflag`). No Viper, no Bubble Tea,
 no zap, no DI frameworks. Every addition must justify itself.
-
----
 
 ## Initialize from this template
 
@@ -66,7 +68,19 @@ That's the whole ceremony. Start writing commands.
 
 `scripts/setup.sh` runs `scripts/init-from-template.sh` (module, imports, `cmd/app`, binary, GoReleaser and Containerfile names), then `go mod tidy`, a build and the tests.
 
----
+## Configuration
+
+Precedence: **flags > env > defaults** (files can slot into `config.Load`
+later without changing call sites — deliberately deferred, YAGNI).
+
+Variables are namespaced by binary name: an app named `my-cli` reads:
+
+| Variable              | Values                  | Default |
+| --------------------- | ----------------------- | ------- |
+| `MY_CLI_LOG_LEVEL`    | debug info warn error   | info    |
+| `MY_CLI_LOG_FORMAT`   | text json               | text    |
+
+Add your own fields in `internal/config.Config` following the same pattern.
 
 ## Architecture
 
@@ -112,8 +126,6 @@ engine portability (req: future non-Cobra engines), hermetic testing
 (snapshot isolation lets every test call `app.Run(...)` repeatedly without
 process spawning), uniform UX contracts (exit codes, error rendering) that
 don't drift when the engine changes.
-
----
 
 ## Creating a command
 
@@ -183,20 +195,6 @@ if c.Changed("count") { /* user set it explicitly */ }
 
 Unsupported values become usage errors automatically (exit 2).
 
-## Configuration
-
-Precedence: **flags > env > defaults** (files can slot into `config.Load`
-later without changing call sites — deliberately deferred, YAGNI).
-
-Variables are namespaced by binary name: an app named `my-cli` reads:
-
-| Variable              | Values                  | Default |
-| --------------------- | ----------------------- | ------- |
-| `MY_CLI_LOG_LEVEL`    | debug info warn error   | info    |
-| `MY_CLI_LOG_FORMAT`   | text json               | text    |
-
-Add your own fields in `internal/config.Config` following the same pattern.
-
 ## Errors & exit codes
 
 Return values decide everything — the framework owns rendering:
@@ -242,12 +240,13 @@ M=github.com/<you>/<repo>
 go build -ldflags "-X $M/internal/build.Version=1.2.3 -X $M/internal/build.Commit=$(git rev-parse --short HEAD) -X $M/internal/build.Date=$(date -u +%FT%TZ)" -o bin/<app> ./cmd/<app>
 
 goreleaser release --snapshot --clean      # local snapshot build of all platforms (dist/)
-git tag v1.2.3 && git push origin v1.2.3   # real release → GitHub Actions
 ```
 
-GoReleaser matrix: linux/amd64, linux/arm64, darwin/amd64, darwin/arm64,
-windows/amd64 — tar.gz archives (zip on Windows) plus `checksums.txt`
-(SHA256) and an auto-generated changelog filtered from conventional commits.
+Releases are automatic: every code change merged to `main` creates the next semver tag and GitHub
+Release (derived from Conventional Commits) and builds the container image (the `pipeline` workflow).
+The workflows do **not** run GoReleaser, so releases carry no binaries; `.goreleaser.yaml` is for local
+cross-platform builds (linux/amd64, linux/arm64, darwin/amd64, darwin/arm64, windows/amd64: tar.gz archives,
+zip on Windows, plus `checksums.txt`).
 
 Version contract — both surfaces byte-identical:
 
@@ -285,18 +284,6 @@ plugin loaders or telemetry means new commands/engine features — the core
 stays untouched. **Keep Bubble Tea out of the base template**: CLIs must stay
 pipe-and-script friendly first.
 
-## CI / CD
-
-| Workflow       | Trigger | Jobs (all org reusables from [ci-templates](https://github.com/guilhermelinosp/ci-templates)) |
-| -------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| `pr-check.yml` | PR      | shellcheck, merge-check, gitleaks, labeler, `go-quality` (+boundary guard), govulncheck — org reusables · CodeQL inline per-repo |
-| `pipeline.yml` | push to `main` | semver release → go test/build → GoReleaser cross-platform binaries onto the release (+boundary guard) → govulncheck |
-
-Secret scanning is native to GitHub — enable *Push protection* under repo
-Settings → Code security. Commits follow [Conventional Commits](https://www.conventionalcommits.org);
-`lefthook install` wires the local guards (`fmt`, vet, tests, lint, secrets,
-conventional message).
-
 ## Principles baked in
 
 KISS · YAGNI · DRY · stdlib-first · explicit dependencies · small interfaces
@@ -305,14 +292,29 @@ recurring pain (engine lock-in, flaky flag state across tests, drift between
 version surfaces). If you cannot name the pain your addition removes, leave
 it out.
 
-## License
+## Development
 
-[Apache 2.0](LICENSE)
+```bash
+go test -race ./...
+go vet ./...
+golangci-lint run ./...
+```
 
-<!-- release pipeline verification -->
+Install the git hooks once with `lefthook install`: they run formatting, vet, tests (with and without `-race`), build, `go mod tidy`, lint, `govulncheck` and a secrets scan. Commits follow [Conventional Commits](https://www.conventionalcommits.org/).
 
-<!-- verify round 2 -->
+## CI/CD
 
-<!-- verify round 3 -->
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `pr-check` | pull request | shellcheck, merge strategy and Conventional Commits (`merge-check`), Gitleaks, labels and the Go quality gate (module integrity, vet, race tests with coverage, lint, build, dependency review). `pr-gate` aggregates them and is the required check |
+| `pipeline` | push to `main` (ignores `.github/**`) or manual | semver guard (blocks an automatic major), immutable tag + GitHub Release, container image |
+| `codeql` | nightly or manual | static analysis (CodeQL) |
+| `security` | nightly or manual | Gitleaks and Trivy scans |
+| `auto-pr` | push to `feat/**` or `fix/**` | opens the pull request automatically |
+| `dependabot-actions-auto-merge` | Dependabot pull requests | auto-merges GitHub Actions bumps |
 
-<!-- verify round 4 -->
+The workflows call reusable workflows from [templates](https://github.com/guilhermelinosp/templates), pinned by commit SHA. Releases need the `HELLNET_ACTIONS_PRIVATE_KEY` secret and the `HELLNET_ACTIONS_CLIENT_ID` variable (set them with `scripts/setup-repo.sh`).
+
+## Contributing and license
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). Licensed under [Apache 2.0](LICENSE).
