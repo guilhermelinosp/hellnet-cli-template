@@ -43,8 +43,7 @@ scripts/setup.sh -n <app-name> -m github.com/<you>/<repo>   # renames the module
 scripts/setup-repo.sh                                       # repo settings, "main" ruleset and CI variable
 ```
 
-Then create the `HELLNET_ACTIONS_PRIVATE_KEY` secret (the script prints the exact command) and make sure the
-`hellnet-actions` GitHub App is installed on the repository.
+Then install the [Octo STS](https://github.com/apps/octo-sts) GitHub App on the repository. No secret is needed: the CI exchanges its OIDC token for a short-lived token (policies in `.github/chainguard/`).
 
 ## Quick start
 
