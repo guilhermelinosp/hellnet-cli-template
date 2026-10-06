@@ -43,8 +43,7 @@ scripts/setup.sh -n <app-name> -m github.com/<you>/<repo>   # renames the module
 scripts/setup-repo.sh                                       # repo settings, "main" ruleset and CI variable
 ```
 
-Then create the `HELLNET_ACTIONS_PRIVATE_KEY` secret (the script prints the exact command) and make sure the
-`hellnet-actions` GitHub App is installed on the repository.
+Then install the [Octo STS](https://github.com/apps/octo-sts) GitHub App on the repository. No secret is needed: the CI exchanges its OIDC token for a short-lived token (policies in `.github/chainguard/`).
 
 ## Quick start
 
@@ -313,7 +312,7 @@ Install the git hooks once with `lefthook install`: they run formatting, vet, te
 | `auto-pr` | push to `feat/**` or `fix/**` | opens the pull request automatically |
 | `dependabot-actions-auto-merge` | Dependabot pull requests | auto-merges GitHub Actions bumps |
 
-The workflows call reusable workflows from [templates](https://github.com/guilhermelinosp/templates) at `@latest`. Releases need the `HELLNET_ACTIONS_PRIVATE_KEY` secret and the `HELLNET_ACTIONS_CLIENT_ID` variable (set them with `scripts/setup-repo.sh`).
+The workflows call reusable workflows from [templates](https://github.com/guilhermelinosp/templates) at `@latest`. No secret is needed: releases and the other jobs exchange their OIDC token for an [Octo STS](https://github.com/apps/octo-sts) token (App installed on the repository; policies in `.github/chainguard/`).
 
 ## Contributing and license
 

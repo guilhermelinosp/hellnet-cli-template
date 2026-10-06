@@ -27,9 +27,6 @@ jobs:
 
   labeler:
     uses: guilhermelinosp/templates/.github/workflows/labeler.yml@latest
-    with:
-      app-client-id: ${{ vars.HELLNET_ACTIONS_CLIENT_ID }}
-    secrets: inherit
 
 
   govulncheck:
