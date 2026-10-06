@@ -9,6 +9,7 @@ permissions:
   pull-requests: write
   checks: write
   security-events: write
+  id-token: write
 
 concurrency:
   group: pr-check-${{ github.ref }}
